@@ -1,0 +1,30 @@
+pipeline {
+    agent {label 'slave_node1'}
+
+    stages {
+        stage('cloning_git_repo') {
+            steps {
+                echo 'cloning git repo'
+                git 'https://github.com/vikrant246/star-agile-health-care.git'
+            }
+        }
+        stage('code_compile') {
+            steps {
+                echo 'maven code copmpilation'
+                sh 'mvn compile'
+            }
+        }
+        stage('packageing_code') {
+            steps {
+                echo 'packageing the mavan code'
+                sh 'mvn clean'
+            }
+        }
+	stage('deploying_code') {
+            steps {
+                echo 'deploying the mavan code'
+                sh 'mvn package'
+            }
+        }
+    }
+}
