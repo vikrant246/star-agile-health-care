@@ -14,17 +14,27 @@ pipeline {
                 sh 'mvn compile'
             }
         }
-        stage('packageing_code') {
+        stage('cleaning_code') {
             steps {
                 echo 'packageing the mavan code'
                 sh 'mvn clean'
             }
         }
-	stage('deploying_code') {
+	stage('packageing_code') {
             steps {
                 echo 'deploying the mavan code'
                 sh 'mvn package'
             }
         }
+      stage('printing_testcase_report'){
+          steps {
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/health_care/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                 }
+            }
+     stage('docker_image_building'){
+        steps {
+           sh 'docker build -t vikrant246/helthimg:${BUILD_NUMBER} .'
+              }
+         }
     }
 }
