@@ -36,5 +36,18 @@ pipeline {
            sh 'docker build -t vikrant246/helthimg:${BUILD_NUMBER} .'
               }
          }
+    stage('dockerhub_login'){
+       steps {
+          echo 'logging to dockerhub'
+          withCredentials([usernamePassword(credentialsId: 'Dcoker_login_credential', passwordVariable: 'Dockerpass', usernameVariable: 'Dockeruser')]) {
+          sh 'docker login -u${env.Dockeruser} -p${env.Dockerpass}'
+                                              }
+             }
+        }
+    stage('pushing_image_to_dockerhub'){
+       steps {
+          sh 'docker push vikrant246/helthimg:${BUILD_NUMBER}'
+              }
+         }
     }
 }
