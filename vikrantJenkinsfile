@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'slave_node1'}
+    agent any
 
     stages {
         stage('cloning_git_repo') {
