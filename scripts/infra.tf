@@ -3,7 +3,7 @@ provider "aws" {
   shared_config_files = ["/root/.aws/credentials"]
 }
 
-resource "aws_instance" "deploy" {
+resource "aws_instance" "my_kube_server" {
   ami           = "ami-05e00961530ae1b55"
   instance_type = "t2.medium"
   key_name      = "medicure"
