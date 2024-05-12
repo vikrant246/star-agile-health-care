@@ -53,9 +53,11 @@ pipeline {
       steps {
             dir('scripts') {
             sh 'sudo chmod 600 medicure.pem'
+            withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'jenkins_iam_user', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
             sh 'terraform init'
             sh 'terraform validate'
             sh 'terraform apply --auto-approve'
+                          }
             }
         }
       }
