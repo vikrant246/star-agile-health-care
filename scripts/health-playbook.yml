@@ -33,4 +33,4 @@
         name: docker
         state: started
     - name: Run the health application
-      command: sudo docker run -dt -p 8085:8081 vikrant246/helthimg:22
+      command: sudo docker run -dt -p 8085:8082 vikrant246/helthimg:22
