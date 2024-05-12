@@ -23,7 +23,7 @@ resource "aws_instance" "deploy" {
     Name = "my_kube_server"
     }
   provisioner "local-exec" {
-        command = " echo ${aws_instance.test-server.public_ip} > inventory "
+        command = " echo ${aws_instance.my_kube_server.public_ip} > inventory "
   }
   provisioner "local-exec" {
   command = "ansible-playbook /var/lib/jenkins/workspace/health_care/scripts/health-playbook.yml "
