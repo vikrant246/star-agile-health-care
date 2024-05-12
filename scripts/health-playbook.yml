@@ -13,4 +13,4 @@
     command : sudo systemctl start docker
 
   - name : Run the health application
-    command: sudo docker run -dt -p 8085:8081 vikrant246/helthimg:11
+    command: sudo docker run -dt -p 8085:8081 vikrant246/helthimg:12
