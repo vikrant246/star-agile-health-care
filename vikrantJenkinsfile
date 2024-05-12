@@ -49,5 +49,14 @@ pipeline {
           sh 'docker push vikrant246/helthimg:${BUILD_NUMBER}'
               }
          }
+   stage('Create Infrastructure using terraform') {
+      steps {
+            dir('scripts') {
+            sh 'sudo chmod 600 medicure.pem'
+            sh 'terraform init'
+            sh 'terraform validate'
+            sh 'terraform apply --auto-approve'
+            }
+        }
     }
 }
