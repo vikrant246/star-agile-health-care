@@ -1,25 +1,22 @@
----
 - hosts: all
   become: true
   tasks:
     - name: setting hostname
-	    command: sudo hostnamectl set-hostname kubemaster
+      command: sudo hostnamectl set-hostname kubemaster
     - name: Install dependencies
       apt:
         name: "{{ item }}"
         state: present
-      with_items:
+        with_items:
         - apt-transport-https
         - ca-certificates
         - curl
         - gnupg
-        - lsb-release
-
+        - lsb-release+
     - name: Add Docker GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
-
     - name: Add Docker repository
       apt_repository:
         repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
@@ -27,8 +24,7 @@
     - name: Install Docker
       apt:
         name: docker-ce
-		 state: present
-
+        state: present
     - name: Start Docker service
       service:
         name: docker
@@ -53,7 +49,7 @@
     - name: restarting containerd
       command: sudo rm -f /etc/containerd/config.toml
     - name: restarting containerd2
-	   command: sudo systemctl restart containerd
+      command: sudo systemctl restart containerd
     - name: inislizaing kubeadm
       command: kubeadm init --pod-network-cidr=10.10.0.0/16 --ignore-preflight-errors=all
     - name: create .kube directory
@@ -63,14 +59,13 @@
         path: $HOME/.kube
         state: directory
         mode: 0755
-
     - name: copy admin.conf to user's kube config
       copy:
         src: /etc/kubernetes/admin.conf
         dest: /home/ubuntu/.kube/config
         remote_src: yes
         owner: ubuntu
-	  - name: creating networking layer
-	    command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
-	  - name: untaint master node
-	    command: kubectl taint node <master-node> node-role.kubernetes.io/control-plane:NoSchedule-
+    - name: creating networking layer
+      command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+    - name: untaint master node
+      command: kubectl taint node <master-node> node-role.kubernetes.io/control-plane:NoSchedule-
