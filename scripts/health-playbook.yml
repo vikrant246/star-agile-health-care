@@ -57,7 +57,7 @@
     - name: copy admin.conf to user's kube config
       command: sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     - name: changing ownership
-      command: sudo chown $(id -u):$(id -g) $HOME/.kube/config
+      shell: sudo chown $(id -u):$(id -g) $HOME/.kube/config
     - name: creating networking layer
       command: curl https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/calico.yaml -O
     - name: networking step2
