@@ -52,6 +52,7 @@
       command: sudo systemctl restart containerd
     - name: inislizaing kubeadm
       command: kubeadm init --pod-network-cidr=10.10.0.0/16 --ignore-preflight-errors=all
+    - become_user: ubuntu
     - name: create .kube directory
       command: mkdir -p $HOME/.kube
     - name: copy admin.conf to user's kube config
