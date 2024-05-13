@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helthimg-deploy
+  labels:
+    app: helthimg
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helthimg
+  template:
+    metadata:
+      labels:
+        app: helthimg
+    spec:
+      containers:
+      - name: helth_img
+        image: vikrant246/helthimg:34
+        ports:
+        - containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helthimg-service
+  labels:
+    app: helthimg
+spec:
+  selector:
+    app: helthimg
+
+  type: NodePort
+  ports:
+  - nodePort: 31032    
+    port: 8082
+    targetPort: 8082
