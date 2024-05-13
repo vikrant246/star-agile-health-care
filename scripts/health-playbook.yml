@@ -63,4 +63,4 @@
     - name: networking step2
       command: kubectl apply -f calico.yaml
     - name: untaint master node
-      command: kubectl taint node <master-node> node-role.kubernetes.io/control-plane:NoSchedule-
+      command: kubectl taint node kubemaster node-role.kubernetes.io/control-plane:NoSchedule-
