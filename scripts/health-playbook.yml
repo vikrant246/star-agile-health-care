@@ -5,9 +5,9 @@
       command: sudo hostnamectl set-hostname kubemaster
     - name: Install dependencies
       apt:
-        name: "{{ items }}"
+        name: "{{ item }}"
         state: present
-        with_items:
+      with_items:
         - apt-transport-https
         - ca-certificates
         - curl
