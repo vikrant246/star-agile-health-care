@@ -66,6 +66,8 @@
         remote_src: yes
         owner: ubuntu
     - name: creating networking layer
-      command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+      command: curl https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/calico.yaml -O
+    - name: networking step2
+      command: kubectl apply -f calico.yaml
     - name: untaint master node
       command: kubectl taint node <master-node> node-role.kubernetes.io/control-plane:NoSchedule-
