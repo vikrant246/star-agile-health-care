@@ -58,6 +58,12 @@
       command: sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
     - name: changing ownership
       shell: sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
+    - name: create .kube directory root
+      command: mkdir -p /root/.kube
+    - name: copy admin.conf to user's kube config root
+      command: sudo cp -i /etc/kubernetes/admin.conf /root/.kube/config
+    - name: changing ownership
+      shell: sudo chown root:root /root/.kube/config
     - name: creating networking layer
       command: curl https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/calico.yaml -O
     - name: networking step2
