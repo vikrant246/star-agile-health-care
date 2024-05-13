@@ -2,6 +2,8 @@
 - hosts: all
   become: true
   tasks:
+    - name: setting hostname
+	    command: sudo hostnamectl set-hostname kubemaster
     - name: Install dependencies
       apt:
         name: "{{ item }}"
@@ -22,15 +24,53 @@
       apt_repository:
         repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
         state: present
-
     - name: Install Docker
       apt:
         name: docker-ce
-        state: present
+		 state: present
 
     - name: Start Docker service
       service:
         name: docker
         state: started
-    - name: Run the health application
-      command: sudo docker run -dt -p 8085:8082 vikrant246/helthimg:22
+    - name: installing kubernates
+      command: sudo apt-get update
+    - name: step1
+      command: sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+    - name: step2
+      shell: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    - name: step3
+      shell: echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' |
+        sudo tee /etc/apt/sources.list.d/kubernetes.list
+    - name: step4
+      command: sudo apt-get update
+    - name: step5
+      command: sudo apt-get install -y kubelet kubeadm kubectl
+    - name: starting kubelet
+      command: sudo  systemctl start kubelet
+    - name: enabling kubelet
+      command: sudo systemctl enable kubelet
+    - name: restarting containerd
+      command: sudo rm -f /etc/containerd/config.toml
+    - name: restarting containerd2
+	   command: sudo systemctl restart containerd
+    - name: inislizaing kubeadm
+      command: kubeadm init --pod-network-cidr=10.10.0.0/16 --ignore-preflight-errors=all
+    - name: create .kube directory
+      become: yes
+      become_user: ubuntu
+      file:
+        path: $HOME/.kube
+        state: directory
+        mode: 0755
+
+    - name: copy admin.conf to user's kube config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        remote_src: yes
+        owner: ubuntu
+	  - name: creating networking layer
+	    command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+	  - name: untaint master node
+	    command: kubectl taint node <master-node> node-role.kubernetes.io/control-plane:NoSchedule-
