@@ -15,7 +15,7 @@ spec:
         app: helthimg
     spec:
       containers:
-      - name: helth_img
+      - name: con
         image: vikrant246/helthimg:34
         ports:
         - containerPort: 8082
