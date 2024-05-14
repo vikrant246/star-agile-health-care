@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: con
-        image: vikrant246/helthimg
+        image: vikrant246/helthimg:55
         ports:
         - containerPort: 8082
 ---
