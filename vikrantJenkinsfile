@@ -33,7 +33,7 @@ pipeline {
             }
      stage('docker_image_building'){
         steps {
-           sh 'docker build -t vikrant246/helthimg:55 .'
+           sh 'docker build -t vikrant246/helthimg:59 .'
               }
          }
     stage('dockerhub_login'){
@@ -46,7 +46,7 @@ pipeline {
         }
     stage('pushing_image_to_dockerhub'){
        steps {
-          sh 'docker push vikrant246/helthimg:55'
+          sh 'docker push vikrant246/helthimg:59'
               }
          }
    stage('Create Infrastructure using terraform') {
